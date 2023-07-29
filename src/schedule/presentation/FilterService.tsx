@@ -3,8 +3,7 @@ import ScheduleActivity from '../core/ScheduleActivity';
 import FilterAction from '../core/FilterAction';
 
 export class FilterService {
-
-  getFilters(urlFilters: string): ScheduleFilter[] {
+  static getFilters(urlFilters: string): ScheduleFilter[] {
     const segments = urlFilters.split('/').filter((str) => str !== '');
 
     if (segments.length) {
@@ -26,7 +25,7 @@ export class FilterService {
     return [];
   }
 
-  stringToTime(timeString: string): Date {
+  static stringToTime(timeString: string): Date {
     const timePattern = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
 
     if (timePattern.test(timeString)) {

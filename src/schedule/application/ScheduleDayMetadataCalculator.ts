@@ -6,9 +6,7 @@ import ScheduleItem from "../core/ScheduleItem";
 class ScheduleDayMetadataCalculator {
     private readonly _configuration: ScheduleConfiguration;
     
-    constructor(
-        configuration: ScheduleConfiguration
-        ) {
+    constructor(configuration: ScheduleConfiguration) {
         this._configuration = configuration;
     }
 

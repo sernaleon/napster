@@ -8,10 +8,7 @@ class ScheduleService implements IScheduleService {
     private readonly _generator: ScheduleGenerator;
     private readonly _metadataCalculator: ScheduleDayMetadataCalculator;
 
-    constructor(
-        generator: ScheduleGenerator, 
-        metadataCalculator: ScheduleDayMetadataCalculator
-        ) {
+    constructor(generator: ScheduleGenerator, metadataCalculator: ScheduleDayMetadataCalculator) {
         this._generator = generator;
         this._metadataCalculator = metadataCalculator;
     }

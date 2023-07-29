@@ -3,6 +3,7 @@ import ScheduleFilter from '../schedule/core/ScheduleFilter';
 import ScheduleActivity from '../schedule/core/ScheduleActivity';
 import FilterAction from '../schedule/core/FilterAction';
 import { FilterService } from '../schedule/presentation/FilterService';
+import Router from '../schedule/presentation/Router';
 
 type SearchState = {
   filters: ScheduleFilterInput[];
@@ -20,7 +21,8 @@ class Search extends Component<{}, SearchState> {
   };
 
   componentDidMount() {
-    const filters = new FilterService().getFilters(document.location.pathname);
+    const route = Router.GetRoute();
+    const filters = FilterService.getFilters(route);
     const filterInputs =  filters.map((input) => this.toFilterInput(input));
     this.setState({ filters: filterInputs });
   }
@@ -85,7 +87,7 @@ class Search extends Component<{}, SearchState> {
       .map((filter) => `${filter.Activity}/${filter.Action}/${filter.Time}`)
       .join('/');
 
-    document.location.pathname = url; // this.props.history.push(url); TODO: LEARN REACT ROUTER 
+      Router.GoTo(url);
   };
 
   render() {

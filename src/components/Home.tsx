@@ -3,6 +3,7 @@ import { Component } from 'react';
 import scheduler from '../schedule/Scheduler';
 import MetadataToTableMapper from '../schedule/presentation/MetadataToTableMapper';
 import { FilterService } from '../schedule/presentation/FilterService';
+import Router from '../schedule/presentation/Router';
 
 interface HomeState {
     schedules: string[][];
@@ -16,7 +17,8 @@ export class Home extends Component<{}, HomeState> {
     };
 
     componentDidMount() {
-        const filters = new FilterService().getFilters(document.location.pathname);
+        const route = Router.GetRoute();
+        const filters = FilterService.getFilters(route);
         const schedules = scheduler.GetSchedules(filters);
         const tables = MetadataToTableMapper.ToScheduleTable(schedules);
         this.setState({ schedules: tables, loading: false });
