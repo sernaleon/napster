@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/napster/static/css/main.4e5aa204.css",
+    "main.js": "/napster/static/js/main.8ffa4c75.js",
+    "static/js/787.79294b62.chunk.js": "/napster/static/js/787.79294b62.chunk.js",
+    "index.html": "/napster/index.html",
+    "main.4e5aa204.css.map": "/napster/static/css/main.4e5aa204.css.map",
+    "main.8ffa4c75.js.map": "/napster/static/js/main.8ffa4c75.js.map",
+    "787.79294b62.chunk.js.map": "/napster/static/js/787.79294b62.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4e5aa204.css",
+    "static/js/main.8ffa4c75.js"
+  ]
+}
