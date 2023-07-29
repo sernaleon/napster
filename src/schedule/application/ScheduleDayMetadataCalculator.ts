@@ -71,16 +71,17 @@ class ScheduleDayMetadataCalculator {
 
     private getActivitiesIn30MinuteSpans(schedule: ReadonlyArray<ScheduleItem>): string[] {
         const result: string[] = [];
-        let startTime = schedule[0].StartTime;
         const endTime = schedule[schedule.length - 1].StartTime;
 
-        while (startTime <= endTime) {
-            const matchingSchedule = schedule.find((item) => startTime >= item.StartTime && startTime < item.EndTime);
+        let timeIterator = schedule[0].StartTime;
+        while (timeIterator <= endTime) {
+            const time = timeIterator;
+            const matchingSchedule = schedule.find((item) => time >= item.StartTime && time < item.EndTime);
             const activity = matchingSchedule?.Activity.toString() || '';
 
             result.push(activity);
 
-            startTime = new Date(startTime.getTime() + 30 * 60 * 1000);
+            timeIterator = new Date(timeIterator.getTime() + 30 * 60 * 1000);
         }
 
         return result;
