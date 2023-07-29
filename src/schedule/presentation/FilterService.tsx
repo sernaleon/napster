@@ -12,8 +12,8 @@ export class FilterService {
         .reduce((result: ScheduleFilter[], value, index, array) => {
           if (index % 3 === 0) {
             const filter: ScheduleFilter = {
-              Activity: this.stringToActivity(value),
-              Action: this.stringToAction(array[index + 1]),
+              Activity: value as ScheduleActivity,
+              Action: array[index + 1] as FilterAction,
               Time: this.stringToTime(array[index + 2])
             };
             result.push(filter);
@@ -24,34 +24,6 @@ export class FilterService {
     }
 
     return [];
-  }
-
-  stringToAction(input: String): FilterAction {
-    const formattedString = input.trim().toLowerCase();
-
-    switch (formattedString) {
-      case 'starts':
-        return FilterAction.Starts;
-      case 'ends':
-        return FilterAction.Ends;
-      default:
-        throw new Error("Invalid action");
-    }
-  }
-
-  stringToActivity(input: String): ScheduleActivity {
-    const formattedString = input.trim().toLowerCase();
-
-    switch (formattedString) {
-      case 'nap':
-        return ScheduleActivity.Nap;
-      case 'awake':
-        return ScheduleActivity.Awake;
-      case 'nighttime':
-        return ScheduleActivity.NightTime;
-      default:
-        throw new Error("Invalid activity");
-    }
   }
 
   stringToTime(timeString: string): Date {
