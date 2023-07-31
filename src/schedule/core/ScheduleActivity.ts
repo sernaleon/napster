@@ -1,7 +1,7 @@
 enum ScheduleActivity {
-    Nap = "nap",
-    Awake = "awake",
-    NightTime = "nighttime"
+    Nap = "Nap",
+    Awake = "Awake",
+    NightTime = "NightTime"
 }
 
 export default ScheduleActivity

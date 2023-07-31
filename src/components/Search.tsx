@@ -2,8 +2,11 @@ import { Component } from 'react';
 import ScheduleFilter from '../schedule/core/ScheduleFilter';
 import ScheduleActivity from '../schedule/core/ScheduleActivity';
 import FilterAction from '../schedule/core/FilterAction';
-import { FilterService } from '../schedule/presentation/FilterService';
-import Router from '../schedule/presentation/Router';
+
+type SearchProps = {
+  filters: ScheduleFilter[];
+  onFiltersChange: (updatedFilters: ScheduleFilter[]) => void;
+};
 
 type SearchState = {
   filters: ScheduleFilterInput[];
@@ -15,31 +18,60 @@ interface ScheduleFilterInput {
   Time: string;
 }
 
-class Search extends Component<{}, SearchState> {
+export default class Search extends Component<SearchProps, SearchState> {
   state: SearchState = {
     filters: [],
   };
 
   componentDidMount() {
-    const route = Router.GetRoute();
-    const filters = FilterService.getFilters(route);
-    const filterInputs =  filters.map((input) => this.toFilterInput(input));
-    this.setState({ filters: filterInputs });
+    this.updateFilters(this.props.filters);
   }
 
+  componentDidUpdate(prevProps: SearchProps) {
+    if (prevProps.filters !== this.props.filters) {
+      this.updateFilters(this.props.filters);
+    }
+  }
 
-  toFilterInput(input: ScheduleFilter): ScheduleFilterInput{
-    const result : ScheduleFilterInput = {
+  updateFilters(scheduleFilters: ScheduleFilter[]) {
+    const filters = scheduleFilters.map((input) => this.toFilterInput(input));
+    this.setState({ filters });
+  }
+
+  toFilterInput(input: ScheduleFilter): ScheduleFilterInput {
+    const result: ScheduleFilterInput = {
       Activity: input.Activity,
       Action: input.Action,
       Time: this.timeToString(input.Time)
     }
     return result;
-}
+  }
+
+  toScheduleFilter(input: ScheduleFilterInput): ScheduleFilter {
+    const result: ScheduleFilter = {
+      Activity: input.Activity as ScheduleActivity,
+      Action: input.Action as FilterAction,
+      Time: this.stringToTime(input.Time),
+    };
+    return result;
+  }
+
   timeToString(time: Date): string {
     const hours = time.getHours().toString().padStart(2, '0');
     const minutes = time.getMinutes().toString().padStart(2, '0');
     return `${hours}:${minutes}`;
+  }
+
+  stringToTime(timeString: string): Date {
+    const timePattern = /^([0-1][0-9]|2[0-3]):[0-5][0-9]$/;
+
+    if (timePattern.test(timeString)) {
+      const [hours, minutes] = timeString.split(':');
+      const time = new Date(0, 0, 0, Number(hours), Number(minutes));
+      return time;
+    }
+
+    throw new Error('Invalid time format');
   }
 
   handleActivityChange = (index: number, value: string) => {
@@ -83,11 +115,9 @@ class Search extends Component<{}, SearchState> {
   handleSubmit = () => {
     const { filters } = this.state;
 
-    const url = filters
-      .map((filter) => `${filter.Activity}/${filter.Action}/${filter.Time}`)
-      .join('/');
+    const scheduleFilters = filters.map((filter) => this.toScheduleFilter(filter));
 
-      Router.GoTo(url);
+    this.props.onFiltersChange(scheduleFilters);
   };
 
   render() {
@@ -97,13 +127,13 @@ class Search extends Component<{}, SearchState> {
         {filters.map((filter, index) => (
           <div className="form-group row" key={index}>
             <select className="col-4" value={filter.Activity} onChange={(e) => this.handleActivityChange(index, e.target.value)}>
-              <option value="nighttime">NightTime</option>
-              <option value="awake">Awake</option>
-              <option value="nap">Nap</option>
+              <option value="Nap">Nap</option>
+              <option value="NightTime">NightTime</option>
+              <option value="Awake">Awake</option>
             </select>
             <select className="col-3" value={filter.Action} onChange={(e) => this.handleActionChange(index, e.target.value)}>
-              <option value="starts">Starts</option>
-              <option value="ends">Ends</option>
+              <option value="Starts">Starts</option>
+              <option value="Ends">Ends</option>
             </select>
 
             <input className="col-3" type="text" value={filter.Time} onChange={(e) => this.handleTimeChange(index, e.target.value)} />
@@ -117,5 +147,3 @@ class Search extends Component<{}, SearchState> {
     );
   }
 }
-
-export default Search;

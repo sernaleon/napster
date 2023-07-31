@@ -7,7 +7,7 @@ import ScheduleItem from "../core/ScheduleItem";
 class ScheduleGenerator {
     private readonly _configuration: ScheduleConfiguration;
 
-    constructor( configuration: ScheduleConfiguration) {
+    constructor(configuration: ScheduleConfiguration) {
         this._configuration = configuration;
     }
 
@@ -31,14 +31,10 @@ class ScheduleGenerator {
             endTime = new Date(endTime.getTime() - this._configuration.TimeIncrementMinutes * 60 * 1000);
         }
 
-         return schedules;
+        return schedules;
     }
 
-    private addNap(
-        results: ScheduleItem[][],
-        current: ScheduleDay,
-        filters: ScheduleFilter[]
-    ): void {
+    private addNap(results: ScheduleItem[][], current: ScheduleDay, filters: ScheduleFilter[]): void {
         if (!current.isValid(filters) || current.getLastEndTime() > this._configuration.BedTimeMax) {
             return;
         }
@@ -60,11 +56,7 @@ class ScheduleGenerator {
         }
     }
 
-    private addAwake(
-        results: ScheduleItem[][],
-        current: ScheduleDay,
-        filters: ScheduleFilter[]
-    ): void {
+    private addAwake(results: ScheduleItem[][], current: ScheduleDay, filters: ScheduleFilter[]): void {
         if (!current.isValid(filters) || current.getLastEndTime() > this._configuration.BedTimeMax) {
             return;
         }

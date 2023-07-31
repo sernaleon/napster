@@ -1,12 +1,12 @@
-td.nap {
+td.Nap {
   background-color: rgba(125, 141, 215, 0.7);
 }
 
-td.awake {
+td.Awake {
   background-color: rgb(150, 245, 150);
 }
 
-td.nighttime {
+td.NightTime {
   background-color: rgb(90, 82, 246);
 }
 
