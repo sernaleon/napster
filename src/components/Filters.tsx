@@ -3,23 +3,23 @@ import ScheduleFilter from '../schedule/core/ScheduleFilter';
 import ScheduleActivity from '../schedule/core/ScheduleActivity';
 import FilterAction from '../schedule/core/FilterAction';
 
-type SearchProps = {
+type FiltersProps = {
   filters: ScheduleFilter[];
   onFiltersChange: (updatedFilters: ScheduleFilter[]) => void;
 };
 
-type SearchState = {
-  filters: ScheduleFilterInput[];
+type FiltersState = {
+  filters: FilterInput[];
 };
 
-interface ScheduleFilterInput {
-  Activity: string;
-  Action: string;
-  Time: string;
+interface FilterInput {
+  activity: string;
+  action: string;
+  time: string;
 }
 
-export default class Search extends Component<SearchProps, SearchState> {
-  state: SearchState = {
+export default class Filters extends Component<FiltersProps, FiltersState> {
+  state: FiltersState = {
     filters: [],
   };
 
@@ -27,7 +27,7 @@ export default class Search extends Component<SearchProps, SearchState> {
     this.updateFilters(this.props.filters);
   }
 
-  componentDidUpdate(prevProps: SearchProps) {
+  componentDidUpdate(prevProps: FiltersProps) {
     if (prevProps.filters !== this.props.filters) {
       this.updateFilters(this.props.filters);
     }
@@ -38,20 +38,20 @@ export default class Search extends Component<SearchProps, SearchState> {
     this.setState({ filters });
   }
 
-  toFilterInput(input: ScheduleFilter): ScheduleFilterInput {
-    const result: ScheduleFilterInput = {
-      Activity: input.Activity,
-      Action: input.Action,
-      Time: this.timeToString(input.Time)
+  toFilterInput(input: ScheduleFilter): FilterInput {
+    const result: FilterInput = {
+      activity: input.Activity,
+      action: input.Action,
+      time: this.timeToString(input.Time)
     }
     return result;
   }
 
-  toScheduleFilter(input: ScheduleFilterInput): ScheduleFilter {
+  toScheduleFilter(input: FilterInput): ScheduleFilter {
     const result: ScheduleFilter = {
-      Activity: input.Activity as ScheduleActivity,
-      Action: input.Action as FilterAction,
-      Time: this.stringToTime(input.Time),
+      Activity: input.activity as ScheduleActivity,
+      Action: input.action as FilterAction,
+      Time: this.stringToTime(input.time),
     };
     return result;
   }
@@ -77,30 +77,30 @@ export default class Search extends Component<SearchProps, SearchState> {
   handleActivityChange = (index: number, value: string) => {
     const { filters } = this.state;
     const updatedFilters = [...filters];
-    updatedFilters[index].Activity = value;
+    updatedFilters[index].activity = value;
     this.setState({ filters: updatedFilters });
   };
 
   handleActionChange = (index: number, value: string) => {
     const { filters } = this.state;
     const updatedFilters = [...filters];
-    updatedFilters[index].Action = value;
+    updatedFilters[index].action = value;
     this.setState({ filters: updatedFilters });
   };
 
   handleTimeChange(index: number, value: string): void {
     const { filters } = this.state;
     const updatedFilters = [...filters];
-    updatedFilters[index].Time = value;
+    updatedFilters[index].time = value;
     this.setState({ filters: updatedFilters });
   };
 
   handleAddFilter = () => {
     const { filters } = this.state;
-    var newItem: ScheduleFilterInput = {
-      Activity: ScheduleActivity.Nap,
-      Action: FilterAction.Ends,
-      Time: "18:30"
+    var newItem: FilterInput = {
+      activity: ScheduleActivity.Nap,
+      action: FilterAction.Ends,
+      time: "18:30"
     }
     this.setState({ filters: [...filters, newItem] });
   };
@@ -114,9 +114,7 @@ export default class Search extends Component<SearchProps, SearchState> {
 
   handleSubmit = () => {
     const { filters } = this.state;
-
     const scheduleFilters = filters.map((filter) => this.toScheduleFilter(filter));
-
     this.props.onFiltersChange(scheduleFilters);
   };
 
@@ -126,17 +124,17 @@ export default class Search extends Component<SearchProps, SearchState> {
       <div>
         {filters.map((filter, index) => (
           <div className="form-group row" key={index}>
-            <select className="col-4" value={filter.Activity} onChange={(e) => this.handleActivityChange(index, e.target.value)}>
+            <select className="col-4" value={filter.activity} onChange={(e) => this.handleActivityChange(index, e.target.value)}>
               <option value="Nap">Nap</option>
               <option value="NightTime">NightTime</option>
               <option value="Awake">Awake</option>
             </select>
-            <select className="col-3" value={filter.Action} onChange={(e) => this.handleActionChange(index, e.target.value)}>
+            <select className="col-3" value={filter.action} onChange={(e) => this.handleActionChange(index, e.target.value)}>
               <option value="Starts">Starts</option>
               <option value="Ends">Ends</option>
             </select>
 
-            <input className="col-3" type="text" value={filter.Time} onChange={(e) => this.handleTimeChange(index, e.target.value)} />
+            <input className="col-3" type="text" value={filter.time} onChange={(e) => this.handleTimeChange(index, e.target.value)} />
 
             <button className="col-1" onClick={() => this.handleRemoveFilter(index)}>x</button>
           </div>

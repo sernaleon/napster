@@ -1,9 +1,10 @@
-import Search from './components/Search';
-import Home from './components/Home';
+import Filters from './components/Filters';
+import Home from './components/Schedules';
 import ScheduleFilter from './schedule/core/ScheduleFilter';
 import { Component } from 'react';
 import ScheduleActivity from './schedule/core/ScheduleActivity';
 import FilterAction from './schedule/core/FilterAction';
+import ScheduleConfiguration from './schedule/core/ScheduleConfiguration';
 
 interface AppState {
   filters: ScheduleFilter[];
@@ -46,14 +47,14 @@ export default class App extends Component<{}, AppState> {
     this.setState({ filters: updatedFilters });
   };
 
-  filterToParam(filter: ScheduleFilter) : string {
+  filterToParam(filter: ScheduleFilter): string {
     return `${filter.Activity}-${filter.Action}-${filter.Time.getHours()}-${filter.Time.getMinutes()}`;
   }
 
-  paramToFilter(param: string) : ScheduleFilter {
+  paramToFilter(param: string): ScheduleFilter {
     const [activity, action, hours, minutes] = param.split('-');
     const time = new Date(0, 0, 0, parseInt(hours, 10), parseInt(minutes, 10));
-  
+
     return {
       Activity: activity as ScheduleActivity,
       Action: action as FilterAction,
@@ -64,11 +65,13 @@ export default class App extends Component<{}, AppState> {
   render() {
     return (
       <div className='row'>
-        <div className='col-9 horizontal-scrollable'>
+        <div className='col-xl-9 col-lg-8 col-sm-6 col-12'>
           <Home filters={this.state.filters} />
         </div>
-        <div className='col-3'>
-          <Search filters={this.state.filters} onFiltersChange={this.handleSearchFiltersChange}  />
+        <div className='col-xl-3 col-lg-4 col-sm-6 col-12'>
+          <div className='row'>
+            <Filters filters={this.state.filters} onFiltersChange={this.handleSearchFiltersChange} />
+          </div>
         </div>
       </div>
     );

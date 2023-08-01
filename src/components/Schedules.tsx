@@ -1,4 +1,4 @@
-import './Home.css';
+import './Schedules.css';
 import { Component } from 'react';
 import scheduler from '../schedule/Scheduler';
 import ScheduleFilter from '../schedule/core/ScheduleFilter';
@@ -77,7 +77,7 @@ export default class Home extends Component<HomeProps, HomeState> {
         const result: string[][] = [];
 
         // Write header
-        result[0] = ["", ...metadatas.map((_, i) => `Schedule ${i + 1}`)];
+        result[0] = [metadatas.length.toString(), ...metadatas.map((_, i) => `Schedule ${i + 1}`)];
 
         // Write keys and values
         for (let i = 0; i < this.Keys.length; i++) {
@@ -113,7 +113,7 @@ export default class Home extends Component<HomeProps, HomeState> {
 
     render() {
         return (
-            <div className="table-container">
+            <div className="table-responsive">
                 <table className="table table-sm table-bordered">
                     <tbody>
                         {this.state.schedules.map((row, rowIndex) => (
