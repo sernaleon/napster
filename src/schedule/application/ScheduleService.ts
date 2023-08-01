@@ -3,6 +3,7 @@ import ScheduleDayMetadata from "../core/ScheduleDayMetadata";
 import ScheduleDayMetadataCalculator from "./ScheduleDayMetadataCalculator";
 import ScheduleFilter from "../core/ScheduleFilter";
 import ScheduleGenerator from "./ScheduleGenerator";
+import ScheduleConfiguration from "../core/ScheduleConfiguration";
 
 class ScheduleService implements IScheduleService {
     private readonly _generator: ScheduleGenerator;
@@ -13,11 +14,11 @@ class ScheduleService implements IScheduleService {
         this._metadataCalculator = metadataCalculator;
     }
 
-    public GetSchedules(filterList: ScheduleFilter[]): ScheduleDayMetadata[] {
+    public getSchedules(filterList: ScheduleFilter[], configuration: ScheduleConfiguration): ScheduleDayMetadata[] {
         return this._generator
-            .generateSchedules(filterList)
-            .map((schedule) => this._metadataCalculator.getMetadata(schedule))
-            .sort((a, b) => b.Score - a.Score);
+            .generateSchedules(filterList, configuration)
+            .map((schedule) => this._metadataCalculator.getMetadata(schedule, configuration))
+            .sort((a, b) => b.score - a.score);
     }
 }
 

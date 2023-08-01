@@ -26,15 +26,15 @@ class ScheduleDay {
 
     public add(activity: ScheduleActivity, endTime: Date): void {
         const item: ScheduleItem = {
-            StartTime: this.getLastEndTime(),
-            EndTime: endTime,
-            Activity: activity
+            startTime: this.getLastEndTime(),
+            endTime: endTime,
+            activity: activity
         };
         this.addItem(item);
     }
 
     public getLastEndTime(): Date {
-        return this._schedule[this._schedule.length - 1].EndTime;
+        return this._schedule[this._schedule.length - 1].endTime;
     }
 
     public isValid(filters: ScheduleFilter[]): boolean {
@@ -43,14 +43,14 @@ class ScheduleDay {
 
     private evaluateFilter = (filter: ScheduleFilter): boolean => {
         const lastItem = this._schedule[this._schedule.length - 1];
-        switch (filter.Action) {
-            case FilterAction.Starts:
+        switch (filter.action) {
+            case FilterAction.STARTS:
                 return (
-                    filter.Time > lastItem.StartTime || this._schedule.some(item => item.Activity === filter.Activity && item.StartTime.getTime() === filter.Time.getTime())
+                    filter.time > lastItem.startTime || this._schedule.some(item => item.activity === filter.activity && item.startTime.getTime() === filter.time.getTime())
                 );
-            case FilterAction.Ends:
+            case FilterAction.ENDS:
                 return (
-                    filter.Time > this.getLastEndTime() || this._schedule.some(item => item.Activity === filter.Activity && item.EndTime.getTime() === filter.Time.getTime())
+                    filter.time > this.getLastEndTime() || this._schedule.some(item => item.activity === filter.activity && item.endTime.getTime() === filter.time.getTime())
                 );
             default:
                 throw new Error('Invalid filter action.');
@@ -61,9 +61,9 @@ class ScheduleDay {
         const startTime = this.getLastEndTime();
         const endTime = new Date(startTime.getTime() + durationMinutes * 60000);
         const item: ScheduleItem = {
-            StartTime: startTime,
-            EndTime: endTime,
-            Activity: activity
+            startTime: startTime,
+            endTime: endTime,
+            activity: activity
         };
         return item;
     }

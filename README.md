@@ -1,6 +1,6 @@
 # Napster
 
-A branch and bound strategy to generate all possible naps given some [constraits](src/schedule/application/defaultConfig.ts) and [filters](src/components/Search.tsx).
+A branch and bound strategy to generate all possible naps given some [constraits](src/components/Configuration.tsx) and [filters](src/components/Filters.tsx).
 
 It's available here:
 

@@ -3,12 +3,12 @@ import ScheduleFilter from '../schedule/core/ScheduleFilter';
 import ScheduleActivity from '../schedule/core/ScheduleActivity';
 import FilterAction from '../schedule/core/FilterAction';
 
-type FiltersProps = {
+interface FiltersProps {
   filters: ScheduleFilter[];
   onFiltersChange: (updatedFilters: ScheduleFilter[]) => void;
 };
 
-type FiltersState = {
+interface FiltersState {
   filters: FilterInput[];
 };
 
@@ -40,18 +40,18 @@ export default class Filters extends Component<FiltersProps, FiltersState> {
 
   toFilterInput(input: ScheduleFilter): FilterInput {
     const result: FilterInput = {
-      activity: input.Activity,
-      action: input.Action,
-      time: this.timeToString(input.Time)
+      activity: input.activity,
+      action: input.action,
+      time: this.timeToString(input.time)
     }
     return result;
   }
 
   toScheduleFilter(input: FilterInput): ScheduleFilter {
     const result: ScheduleFilter = {
-      Activity: input.activity as ScheduleActivity,
-      Action: input.action as FilterAction,
-      Time: this.stringToTime(input.time),
+      activity: input.activity as ScheduleActivity,
+      action: input.action as FilterAction,
+      time: this.stringToTime(input.time),
     };
     return result;
   }
@@ -98,8 +98,8 @@ export default class Filters extends Component<FiltersProps, FiltersState> {
   handleAddFilter = () => {
     const { filters } = this.state;
     var newItem: FilterInput = {
-      activity: ScheduleActivity.Nap,
-      action: FilterAction.Ends,
+      activity: ScheduleActivity.NAP,
+      action: FilterAction.ENDS,
       time: "18:30"
     }
     this.setState({ filters: [...filters, newItem] });

@@ -4,31 +4,25 @@ import ScheduleDayMetadata from "../core/ScheduleDayMetadata";
 import ScheduleItem from "../core/ScheduleItem";
 
 class ScheduleDayMetadataCalculator {
-    private readonly _configuration: ScheduleConfiguration;
-    
-    constructor(configuration: ScheduleConfiguration) {
-        this._configuration = configuration;
-    }
-
-    public getMetadata(schedule: ReadonlyArray<ScheduleItem>): ScheduleDayMetadata {
+    public getMetadata(schedule: ReadonlyArray<ScheduleItem>, configuration: ScheduleConfiguration): ScheduleDayMetadata {
         const result: ScheduleDayMetadata = {
-            Score: this.getScore(schedule),
-            NumberOfNaps: this.getNumberOfNaps(schedule),
-            NapHours: this.getNapHours(schedule),
-            AwakeHours: this.getAwakeHours(schedule),
-            NightHours: this.getNightHours(schedule),
-            TotalSleepHours: this.getTotalSleepHours(schedule),
-            ActivitiesIn30MinuteSpans: this.getActivitiesIn30MinuteSpans(schedule),
+            score: this.getScore(schedule, configuration),
+            numberOfNaps: this.getNumberOfNaps(schedule),
+            napHours: this.getNapHours(schedule),
+            awakeHours: this.getAwakeHours(schedule),
+            nightHours: this.getNightHours(schedule, configuration),
+            totalSleepHours: this.getTotalSleepHours(schedule, configuration),
+            activitiesIn30MinuteSpans: this.getActivitiesIn30MinuteSpans(schedule),
         };
         return result;
     }
 
-    private getScore(schedule: ReadonlyArray<ScheduleItem>): number {
-        const napCountScore = this.calculateScore(this.getNumberOfNaps(schedule), this._configuration.TargetNapCount);
-        const napHoursScore = this.calculateScore(this.getNapHours(schedule), this._configuration.TargetNapHours);
-        const awakeHoursScore = this.calculateScore(this.getAwakeHours(schedule), this._configuration.TargetAwakeHours);
-        const nightHoursScore = this.calculateScore(this.getNightHours(schedule), this._configuration.TargetNightHours);
-        const totalSleepHoursScore = this.calculateScore(this.getTotalSleepHours(schedule), this._configuration.TargetTotalSleepHours);
+    private getScore(schedule: ReadonlyArray<ScheduleItem>, configuration: ScheduleConfiguration): number {
+        const napCountScore = this.calculateScore(this.getNumberOfNaps(schedule), configuration.targetNapCount);
+        const napHoursScore = this.calculateScore(this.getNapHours(schedule), configuration.targetNapHours);
+        const awakeHoursScore = this.calculateScore(this.getAwakeHours(schedule), configuration.targetAwakeHours);
+        const nightHoursScore = this.calculateScore(this.getNightHours(schedule, configuration), configuration.targetNightHours);
+        const totalSleepHoursScore = this.calculateScore(this.getTotalSleepHours(schedule, configuration), configuration.targetTotalSleepHours);
 
         const result = napCountScore + napHoursScore + awakeHoursScore + nightHoursScore + totalSleepHoursScore;
 
@@ -36,46 +30,46 @@ class ScheduleDayMetadataCalculator {
     }
 
     private getNumberOfNaps(schedule: ReadonlyArray<ScheduleItem>): number {
-        return schedule.filter((x) => x.Activity === ScheduleActivity.Nap).length;
+        return schedule.filter((x) => x.activity === ScheduleActivity.NAP).length;
     }
 
     private getNapHours(schedule: ReadonlyArray<ScheduleItem>): number {
-        return this.getActivityHours(schedule, ScheduleActivity.Nap);
+        return this.getActivityHours(schedule, ScheduleActivity.NAP);
     }
 
     private getAwakeHours(schedule: ReadonlyArray<ScheduleItem>): number {
-        return this.getActivityHours(schedule, ScheduleActivity.Awake);
+        return this.getActivityHours(schedule, ScheduleActivity.AWAKE);
     }
 
-    private getNightHours(schedule: ReadonlyArray<ScheduleItem>): number {
+    private getNightHours(schedule: ReadonlyArray<ScheduleItem>, configuration: ScheduleConfiguration): number {
         return (
-            this.getActivityHours(schedule, ScheduleActivity.NightTime) +
+            this.getActivityHours(schedule, ScheduleActivity.NIGHT_TIME) +
             24 -
-            (this._configuration.EndOfSchedule.getTime() - this._configuration.StartOfSchedule.getTime()) / (1000 * 60 * 60)
+            (configuration.endOfSchedule.getTime() - configuration.startOfSchedule.getTime()) / (1000 * 60 * 60)
         );
     }
 
-    private getTotalSleepHours(schedule: ReadonlyArray<ScheduleItem>): number {
-        return this.getNightHours(schedule) + this.getNapHours(schedule);
+    private getTotalSleepHours(schedule: ReadonlyArray<ScheduleItem>, configuration: ScheduleConfiguration): number {
+        return this.getNightHours(schedule, configuration) + this.getNapHours(schedule);
     }
 
     private getActivityHours(schedule: ReadonlyArray<ScheduleItem>, activity: ScheduleActivity): number {
         return (
             schedule
-                .filter((x) => x.Activity === activity)
-                .reduce((sum, item) => sum + (item.EndTime.getTime() - item.StartTime.getTime()) / (1000 * 60 * 60), 0) || 0
+                .filter((x) => x.activity === activity)
+                .reduce((sum, item) => sum + (item.endTime.getTime() - item.startTime.getTime()) / (1000 * 60 * 60), 0) || 0
         );
     }
 
     private getActivitiesIn30MinuteSpans(schedule: ReadonlyArray<ScheduleItem>): string[] {
         const result: string[] = [];
-        const endTime = schedule[schedule.length - 1].StartTime;
+        const endTime = schedule[schedule.length - 1].startTime;
 
-        let timeIterator = schedule[0].StartTime;
+        let timeIterator = schedule[0].startTime;
         while (timeIterator <= endTime) {
             const time = timeIterator;
-            const matchingSchedule = schedule.find((item) => time >= item.StartTime && time < item.EndTime);
-            const activity = matchingSchedule?.Activity.toString() || '';
+            const matchingSchedule = schedule.find((item) => time >= item.startTime && time < item.endTime);
+            const activity = matchingSchedule?.activity.toString() || '';
 
             result.push(activity);
 

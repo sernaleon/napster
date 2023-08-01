@@ -5,69 +5,63 @@ import ScheduleFilter from "../core/ScheduleFilter";
 import ScheduleItem from "../core/ScheduleItem";
 
 class ScheduleGenerator {
-    private readonly _configuration: ScheduleConfiguration;
-
-    constructor(configuration: ScheduleConfiguration) {
-        this._configuration = configuration;
-    }
-
-    public generateSchedules(filters: ScheduleFilter[]): ScheduleItem[][] {
+    public generateSchedules(filters: ScheduleFilter[], configuration: ScheduleConfiguration): ScheduleItem[][] {
         const schedules: ScheduleItem[][] = [];
 
-        let startTime = this._configuration.StartOfSchedule;
-        let endTime = this._configuration.WakeUpTimeMax;
+        let startTime = configuration.startOfSchedule;
+        let endTime = configuration.wakeUpTimeMax;
 
-        while (endTime >= this._configuration.WakeUpTimeMin) {
+        while (endTime >= configuration.wakeUpTimeMin) {
             const scheduleDay = new ScheduleDay();
             const item: ScheduleItem = {
-                StartTime: startTime,
-                EndTime: endTime,
-                Activity: ScheduleActivity.NightTime
+                startTime: startTime,
+                endTime: endTime,
+                activity: ScheduleActivity.NIGHT_TIME
             };
             scheduleDay.addItem(item);
 
-            this.addAwake(schedules, scheduleDay, filters);
+            this.addAwake(schedules, scheduleDay, filters, configuration);
 
-            endTime = new Date(endTime.getTime() - this._configuration.TimeIncrementMinutes * 60 * 1000);
+            endTime = new Date(endTime.getTime() - configuration.timeIncrementMinutes * 60 * 1000);
         }
 
         return schedules;
     }
 
-    private addNap(results: ScheduleItem[][], current: ScheduleDay, filters: ScheduleFilter[]): void {
-        if (!current.isValid(filters) || current.getLastEndTime() > this._configuration.BedTimeMax) {
+    private addNap(results: ScheduleItem[][], current: ScheduleDay, filters: ScheduleFilter[], configuration: ScheduleConfiguration): void {
+        if (!current.isValid(filters) || current.getLastEndTime() > configuration.bedTimeMax) {
             return;
         }
 
-        if (current.getLastEndTime() >= this._configuration.BedTimeMin) {
-            current.add(ScheduleActivity.NightTime, this._configuration.EndOfSchedule);
+        if (current.getLastEndTime() >= configuration.bedTimeMin) {
+            current.add(ScheduleActivity.NIGHT_TIME, configuration.endOfSchedule);
             const schedule = current.getSchedule();
             results.push(schedule);
             return;
         }
 
-        let napTimeMinutes = this._configuration.NapTimeMinutesMax;
+        let napTimeMinutes = configuration.napTimeMinutesMax;
 
-        while (napTimeMinutes >= this._configuration.NapTimeMinutesMin) {
-            const schedule = current.newWith(ScheduleActivity.Nap, napTimeMinutes);
-            this.addAwake(results, schedule, filters);
+        while (napTimeMinutes >= configuration.napTimeMinutesMin) {
+            const schedule = current.newWith(ScheduleActivity.NAP, napTimeMinutes);
+            this.addAwake(results, schedule, filters, configuration);
 
-            napTimeMinutes -= this._configuration.TimeIncrementMinutes;
+            napTimeMinutes -= configuration.timeIncrementMinutes;
         }
     }
 
-    private addAwake(results: ScheduleItem[][], current: ScheduleDay, filters: ScheduleFilter[]): void {
-        if (!current.isValid(filters) || current.getLastEndTime() > this._configuration.BedTimeMax) {
+    private addAwake(results: ScheduleItem[][], current: ScheduleDay, filters: ScheduleFilter[], configuration: ScheduleConfiguration): void {
+        if (!current.isValid(filters) || current.getLastEndTime() > configuration.bedTimeMax) {
             return;
         }
 
-        let awakeTimeMinutes = this._configuration.AwakeTimeMinutesMax;
+        let awakeTimeMinutes = configuration.awakeTimeMinutesMax;
 
-        while (awakeTimeMinutes >= this._configuration.AwakeTimeMinutesMin) {
-            const schedule = current.newWith(ScheduleActivity.Awake, awakeTimeMinutes);
-            this.addNap(results, schedule, filters);
+        while (awakeTimeMinutes >= configuration.awakeTimeMinutesMin) {
+            const schedule = current.newWith(ScheduleActivity.AWAKE, awakeTimeMinutes);
+            this.addNap(results, schedule, filters, configuration);
 
-            awakeTimeMinutes -= this._configuration.TimeIncrementMinutes;
+            awakeTimeMinutes -= configuration.timeIncrementMinutes;
         }
     }
 }

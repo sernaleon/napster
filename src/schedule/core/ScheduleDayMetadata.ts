@@ -1,11 +1,11 @@
 interface ScheduleDayMetadata {
-    Score: number;
-    NumberOfNaps: number;
-    NapHours: number;
-    AwakeHours: number;
-    NightHours: number;
-    TotalSleepHours: number;
-    ActivitiesIn30MinuteSpans: string[];
+    score: number;
+    numberOfNaps: number;
+    napHours: number;
+    awakeHours: number;
+    nightHours: number;
+    totalSleepHours: number;
+    activitiesIn30MinuteSpans: string[];
 }
 
 export default ScheduleDayMetadata

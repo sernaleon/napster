@@ -1,6 +1,6 @@
 enum FilterAction {
-    Starts = "Starts",
-    Ends = "Ends"
+    STARTS = "Starts",
+    ENDS = "Ends"
 }
 
 export default FilterAction;

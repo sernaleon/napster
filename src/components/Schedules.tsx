@@ -3,9 +3,11 @@ import { Component } from 'react';
 import scheduler from '../schedule/Scheduler';
 import ScheduleFilter from '../schedule/core/ScheduleFilter';
 import ScheduleDayMetadata from '../schedule/core/ScheduleDayMetadata';
+import ScheduleConfiguration from '../schedule/core/ScheduleConfiguration';
 
 interface HomeProps {
     filters: ScheduleFilter[];
+    config: ScheduleConfiguration;
 }
 
 interface HomeState {
@@ -57,18 +59,17 @@ export default class Home extends Component<HomeProps, HomeState> {
         "20:00"
     ];
 
-    componentDidMount() {
-        this.updateSchedules(this.props.filters);
-    }
-
     componentDidUpdate(prevProps: HomeProps) {
-        if (prevProps.filters !== this.props.filters) {
-            this.updateSchedules(this.props.filters);
+        console.log('hola')
+        if (prevProps.filters !== this.props.filters || this.props.config !== prevProps.config) {
+            this.updateSchedules();
         }
     }
 
-    updateSchedules(filters: ScheduleFilter[]) {
-        const schedules = scheduler.GetSchedules(filters);
+    updateSchedules() {
+        const { filters, config } = this.props;
+        console.log('loadin',filters,config, config.awakeTimeMinutesMax)
+        const schedules = scheduler.getSchedules(filters, config);
         const tables = this.toScheduleTable(schedules);
         this.setState({ schedules: tables, loading: false });
     }
@@ -92,22 +93,22 @@ export default class Home extends Component<HomeProps, HomeState> {
         if (index >= 0 && index < 6) {
             switch (index) {
                 case 0:
-                    return metadata.Score.toString();
+                    return metadata.score.toString();
                 case 1:
-                    return metadata.NumberOfNaps.toString();
+                    return metadata.numberOfNaps.toString();
                 case 2:
-                    return metadata.NapHours.toString();
+                    return metadata.napHours.toString();
                 case 3:
-                    return metadata.AwakeHours.toString();
+                    return metadata.awakeHours.toString();
                 case 4:
-                    return metadata.NightHours.toString();
+                    return metadata.nightHours.toString();
                 case 5:
-                    return metadata.TotalSleepHours.toString();
+                    return metadata.totalSleepHours.toString();
                 default:
                     throw new Error("Unreachable error")
             }
         } else {
-            return metadata.ActivitiesIn30MinuteSpans[index - 6] || "";
+            return metadata.activitiesIn30MinuteSpans[index - 6] || "";
         }
     }
 
