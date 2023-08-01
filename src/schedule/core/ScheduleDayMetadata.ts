@@ -5,7 +5,7 @@ interface ScheduleDayMetadata {
     awakeHours: number;
     nightHours: number;
     totalSleepHours: number;
-    activitiesIn30MinuteSpans: string[];
+    activitiesInSpans: string[];
 }
 
 export default ScheduleDayMetadata

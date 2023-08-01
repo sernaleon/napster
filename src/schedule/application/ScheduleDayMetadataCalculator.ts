@@ -12,7 +12,7 @@ class ScheduleDayMetadataCalculator {
             awakeHours: this.getAwakeHours(schedule),
             nightHours: this.getNightHours(schedule, configuration),
             totalSleepHours: this.getTotalSleepHours(schedule, configuration),
-            activitiesIn30MinuteSpans: this.getActivitiesIn30MinuteSpans(schedule),
+            activitiesInSpans: this.getActivitiesInSpans(schedule, configuration),
         };
         return result;
     }
@@ -61,7 +61,7 @@ class ScheduleDayMetadataCalculator {
         );
     }
 
-    private getActivitiesIn30MinuteSpans(schedule: ReadonlyArray<ScheduleItem>): string[] {
+    private getActivitiesInSpans(schedule: ReadonlyArray<ScheduleItem>, configuration: ScheduleConfiguration): string[] {
         const result: string[] = [];
         const endTime = schedule[schedule.length - 1].startTime;
 
@@ -73,7 +73,7 @@ class ScheduleDayMetadataCalculator {
 
             result.push(activity);
 
-            timeIterator = new Date(timeIterator.getTime() + 30 * 60 * 1000);
+            timeIterator = new Date(timeIterator.getTime() + configuration.timeIncrementMinutes * 60 * 1000);
         }
 
         return result;
