@@ -53,13 +53,13 @@ export default class Schedules extends Component<SchedulesProps, SchedulesState>
     const activities = this.generateActivities();
 
     const keys: string[] = [
+      ...activities.map((activity) => this.formatTime(activity)),
       "Score",
       "Nap Count",
       "Nap Hours",
       "Awake Hours",
       "Night Hours",
       "Sleep Hours",
-      ...activities.map((activity) => this.formatTime(activity))
     ];
 
     return keys;
@@ -79,25 +79,26 @@ export default class Schedules extends Component<SchedulesProps, SchedulesState>
   }
 
   getValue(metadata: ScheduleDayMetadata, index: number): string {
-    if (index >= 0 && index < 6) {
-      switch (index) {
-        case 0:
-          return metadata.score.toString();
-        case 1:
-          return metadata.numberOfNaps.toString();
-        case 2:
-          return metadata.napHours.toString();
-        case 3:
-          return metadata.awakeHours.toString();
-        case 4:
-          return metadata.nightHours.toString();
-        case 5:
-          return metadata.totalSleepHours.toString();
-        default:
-          throw new Error("Unreachable error");
-      }
+    if (index >= metadata.activitiesInSpans.length) {
+        const i = index - metadata.activitiesInSpans.length;
+        switch (i) {
+            case 0:
+              return metadata.score.toString();
+            case 1:
+              return metadata.numberOfNaps.toString();
+            case 2:
+              return metadata.napHours.toString();
+            case 3:
+              return metadata.awakeHours.toString();
+            case 4:
+              return metadata.nightHours.toString();
+            case 5:
+              return metadata.totalSleepHours.toString();
+            default:
+              throw new Error("Unreachable error");
+          }
     } else {
-      return metadata.activitiesInSpans[index - 6] || "";
+        return metadata.activitiesInSpans[index]
     }
   }
 
