@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/napster/static/css/main.dca05101.css",
-    "main.js": "/napster/static/js/main.418e1d4e.js",
+    "main.css": "/napster/static/css/main.dcaff031.css",
+    "main.js": "/napster/static/js/main.4f0612e4.js",
     "static/js/787.79294b62.chunk.js": "/napster/static/js/787.79294b62.chunk.js",
     "index.html": "/napster/index.html",
-    "main.dca05101.css.map": "/napster/static/css/main.dca05101.css.map",
-    "main.418e1d4e.js.map": "/napster/static/js/main.418e1d4e.js.map",
+    "main.dcaff031.css.map": "/napster/static/css/main.dcaff031.css.map",
+    "main.4f0612e4.js.map": "/napster/static/js/main.4f0612e4.js.map",
     "787.79294b62.chunk.js.map": "/napster/static/js/787.79294b62.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.dca05101.css",
-    "static/js/main.418e1d4e.js"
+    "static/css/main.dcaff031.css",
+    "static/js/main.4f0612e4.js"
   ]
 }
