@@ -120,7 +120,7 @@ export default class Home extends Component<HomeProps, HomeState> {
                         {this.state.schedules.map((row, rowIndex) => (
                             <tr key={rowIndex}>
                                 {row.map((cellValue, columnIndex) => (
-                                    <td key={`${rowIndex}-${columnIndex}`} className={cellValue}>{cellValue}</td>
+                                    <td key={`${rowIndex}-${columnIndex}`} className={`text-nowrap ${cellValue}`}>{cellValue}</td>
                                 ))}
                             </tr>
                         ))}

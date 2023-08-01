@@ -121,7 +121,7 @@ export default class Filters extends Component<FiltersProps, FiltersState> {
   render() {
     const { filters } = this.state;
     return (
-      <div>
+      <div className='col'>
         {filters.map((filter, index) => (
           <div className="form-group row" key={index}>
             <select className="col-4" value={filter.activity} onChange={(e) => this.handleActivityChange(index, e.target.value)}>

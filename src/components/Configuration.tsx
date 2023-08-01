@@ -70,14 +70,9 @@ export default class Configuration extends Component<ConfigurationProps, Configu
 
     render() {
         return (
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Setting</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
+            <div className='col'>
+                <h2> Settings</h2>
+                <table className='row'>
                     <tbody>
                         {this.state.configurationProperties.map((property) => (
                             <tr className='row' key={property.name}>
@@ -96,7 +91,7 @@ export default class Configuration extends Component<ConfigurationProps, Configu
                                         />
                                     ) : property.type === InputType.TIME ? (
                                         <div className='row'>
-                                            <input className='col-5'
+                                            <input className='col-4'
                                                 type="number"
                                                 value={property.hours}
                                                 onChange={(e) => {
@@ -106,7 +101,7 @@ export default class Configuration extends Component<ConfigurationProps, Configu
                                                 min={0}
                                                 max={23}
                                             />
-                                            :
+                                            <span className='col-2 text-center'>:</span>
                                             <input className='col-5'
                                                 type="number"
                                                 value={property.minutes}
@@ -125,7 +120,7 @@ export default class Configuration extends Component<ConfigurationProps, Configu
                         ))}
                     </tbody>
                 </table>
-                <button onClick={() => this.handleUpdateClick()}>Update</button>
+                <button className='row' onClick={() => this.handleUpdateClick()}>Update</button>
             </div>
         );
     }
