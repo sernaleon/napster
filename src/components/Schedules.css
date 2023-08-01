@@ -1,19 +1,19 @@
 td.Nap {
-  background-color: rgba(125, 141, 215, 0.7);
+  background-color: rgba(0, 32, 176, 0.7);
 }
 
 td.Awake {
-  background-color: rgb(150, 245, 150);
+  background-color: rgb(1, 81, 1);
 }
 
 td.NightTime {
-  background-color: rgb(90, 82, 246);
+  background-color: rgb(61, 30, 66);
 }
 
 .table th:first-child,
 .table td:first-child {
   position: sticky;
   left: 0;
-  background-color: white;
+  background-color: rgba(0, 0, 0, 0);
   text-align: right;
 }
