@@ -5,18 +5,18 @@ import ScheduleFilter from '../schedule/core/ScheduleFilter';
 import ScheduleDayMetadata from '../schedule/core/ScheduleDayMetadata';
 import ScheduleConfiguration from '../schedule/core/ScheduleConfiguration';
 
-interface HomeProps {
+interface SchedulesProps {
     filters: ScheduleFilter[];
     config: ScheduleConfiguration;
 }
 
-interface HomeState {
+interface SchedulesState {
     schedules: string[][];
     loading: boolean;
 }
 
-export default class Home extends Component<HomeProps, HomeState> {
-    state: HomeState = {
+export default class Schedules extends Component<SchedulesProps, SchedulesState> {
+    state: SchedulesState = {
         schedules: [],
         loading: true
     };
@@ -59,8 +59,7 @@ export default class Home extends Component<HomeProps, HomeState> {
         "20:00"
     ];
 
-    componentDidUpdate(prevProps: HomeProps) {
-        console.log('hola')
+    componentDidUpdate(prevProps: SchedulesProps) {
         if (prevProps.filters !== this.props.filters || this.props.config !== prevProps.config) {
             this.updateSchedules();
         }
@@ -68,7 +67,6 @@ export default class Home extends Component<HomeProps, HomeState> {
 
     updateSchedules() {
         const { filters, config } = this.props;
-        console.log('loadin',filters,config, config.awakeTimeMinutesMax)
         const schedules = scheduler.getSchedules(filters, config);
         const tables = this.toScheduleTable(schedules);
         this.setState({ schedules: tables, loading: false });
